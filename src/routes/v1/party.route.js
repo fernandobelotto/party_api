@@ -1,21 +1,18 @@
 const express = require('express');
-const auth = require('../../middlewares/auth');
+// const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const partyValidation = require('../../validations/party.validation');
 const partyController = require('../../controllers/party.controller');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .post(auth('managePartys'), validate(partyValidation.createParty), partyController.createParty)
-  .get(auth('getPartys'), validate(partyValidation.getPartys), partyController.getPartys);
+router.route('/').post(partyController.createParty).get(validate(partyValidation.getPartys), partyController.getPartys);
 
 router
   .route('/:partyId')
-  .get(auth('getPartys'), validate(partyValidation.getParty), partyController.getParty)
-  .patch(auth('managePartys'), validate(partyValidation.updateParty), partyController.updateParty)
-  .delete(auth('managePartys'), validate(partyValidation.deleteParty), partyController.deleteParty);
+  .get(validate(partyValidation.getParty), partyController.getParty)
+  .patch(validate(partyValidation.updateParty), partyController.updateParty)
+  .delete(validate(partyValidation.deleteParty), partyController.deleteParty);
 
 module.exports = router;
 

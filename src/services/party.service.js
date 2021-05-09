@@ -8,9 +8,9 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Party>}
  */
 const createParty = async (partyBody) => {
-  if (await Party.isEmailTaken(partyBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
+  // if (await Party.isEmailTaken(partyBody.email)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  // }
   const party = await Party.create(partyBody);
   return party;
 };
