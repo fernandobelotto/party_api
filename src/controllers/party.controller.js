@@ -13,7 +13,8 @@ const getPartys = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await partyService.queryPartys(filter, options);
-  res.send(result);
+  const list = result.results;
+  res.send(list);
 });
 
 const getParty = catchAsync(async (req, res) => {
