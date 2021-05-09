@@ -11,7 +11,17 @@ const partySchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    location: {
+    imageName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    date: {
+      type: Date,
+      required: true,
+      trim: true,
+    },
+    local: {
       type: String,
       required: true,
       trim: true,
