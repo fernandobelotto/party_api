@@ -1,38 +1,31 @@
 const express = require('express');
-const auth = require('../../middlewares/auth');
-const validate = require('../../middlewares/validate');
-const partyValidation = require('../../validations/party.validation');
-const partyController = require('../../controllers/party.controller');
+// const auth = require('../../middlewares/auth');
+// const validate = require('../../middlewares/validate');
+// const userValidation = require('../../validations/user.validation');
+const userController = require('../../controllers/user.controller');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .post(auth('managePartys'), validate(partyValidation.createParty), partyController.createParty)
-  .get(auth('getPartys'), validate(partyValidation.getPartys), partyController.getPartys);
+router.route('/').post(userController.createUser).get(userController.getUsers);
 
-router
-  .route('/:partyId')
-  .get(auth('getPartys'), validate(partyValidation.getParty), partyController.getParty)
-  .patch(auth('managePartys'), validate(partyValidation.updateParty), partyController.updateParty)
-  .delete(auth('managePartys'), validate(partyValidation.deleteParty), partyController.deleteParty);
+router.route('/:userId').get(userController.getUser).patch(userController.updateUser).delete(userController.deleteUser);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Partys
- *   description: Party management and retrieval
+ *   name: Users
+ *   description: User management and retrieval
  */
 
 /**
  * @swagger
- * /partys:
+ * /users:
  *   post:
- *     summary: Create a party
- *     description: Only admins can create other partys.
- *     tags: [Partys]
+ *     summary: Create a user
+ *     description: Only admins can create other users.
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -60,19 +53,19 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [party, admin]
+ *                  enum: [user, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: party
+ *               role: user
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Party'
+ *                $ref: '#/components/schemas/User'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -81,9 +74,9 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all partys
- *     description: Only admins can retrieve all partys.
- *     tags: [Partys]
+ *     summary: Get all users
+ *     description: Only admins can retrieve all users.
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,12 +84,12 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: Party name
+ *         description: User name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: Party role
+ *         description: User role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -108,7 +101,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of partys
+ *         description: Maximum number of users
  *       - in: query
  *         name: page
  *         schema:
@@ -127,7 +120,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Party'
+ *                     $ref: '#/components/schemas/User'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -148,11 +141,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /partys/{id}:
+ * /users/{id}:
  *   get:
- *     summary: Get a party
- *     description: Logged in partys can fetch only their own party information. Only admins can fetch other partys.
- *     tags: [Partys]
+ *     summary: Get a user
+ *     description: Logged in users can fetch only their own user information. Only admins can fetch other users.
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -161,14 +154,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Party id
+ *         description: User id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Party'
+ *                $ref: '#/components/schemas/User'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -177,9 +170,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a party
- *     description: Logged in partys can only update their own information. Only admins can update other partys.
- *     tags: [Partys]
+ *     summary: Update a user
+ *     description: Logged in users can only update their own information. Only admins can update other users.
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,7 +181,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Party id
+ *         description: User id
  *     requestBody:
  *       required: true
  *       content:
@@ -217,7 +210,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Party'
+ *                $ref: '#/components/schemas/User'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -228,9 +221,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a party
- *     description: Logged in partys can delete only themselves. Only admins can delete other partys.
- *     tags: [Partys]
+ *     summary: Delete a user
+ *     description: Logged in users can delete only themselves. Only admins can delete other users.
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -239,7 +232,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Party id
+ *         description: User id
  *     responses:
  *       "200":
  *         description: No content
