@@ -26,6 +26,8 @@ const partySchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    participants: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
+    tickets: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Ticket' }],
   },
   {
     timestamps: true,
@@ -71,3 +73,20 @@ partySchema.pre('save', async function (next) {
 const Party = mongoose.model('Party', partySchema);
 
 module.exports = Party;
+
+// const ticketSchema = mongoose.Schema({
+//   description: String,
+//   price: Number,
+//   displayablePrice: String,
+// });
+
+// const purchasedTicketSchema = mongoose.Schema({
+//   ticket: ticketSchema,
+//   event: partySchema,
+// });
+
+// const userSchema = mongoose.Schema({
+//   name: String,
+//   imageName: String,
+//   userTickets: [purchasedTicketSchema],
+// });
