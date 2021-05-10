@@ -1,6 +1,7 @@
 const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
+const ticketRoute = require('./ticket.route');
 const partyRoute = require('./party.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
@@ -19,6 +20,10 @@ const defaultRoutes = [
   {
     path: '/partys',
     route: partyRoute,
+  },
+  {
+    path: '/tickets',
+    route: ticketRoute,
   },
 ];
 

@@ -11,7 +11,7 @@ const createParty = catchAsync(async (req, res) => {
 
 const getPartys = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'role']);
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page', 'populate']);
   const result = await partyService.queryPartys(filter, options);
   const list = result.results;
   res.send(list);

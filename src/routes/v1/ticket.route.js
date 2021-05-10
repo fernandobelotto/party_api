@@ -1,32 +1,36 @@
 const express = require('express');
-const partyController = require('../../controllers/party.controller');
+// const auth = require('../../middlewares/auth');
+// const validate = require('../../middlewares/validate');
+// const ticketValidation = require('../../validations/ticket.validation');
+const ticketController = require('../../controllers/ticket.controller');
 
 const router = express.Router();
 
-router.route('/').post(partyController.createParty).get(partyController.getPartys);
+router.route('/').post(ticketController.createTicket).get(ticketController.getTickets);
 
 router
-  .route('/:partyId')
-  .get(partyController.getParty)
-  .patch(partyController.updateParty)
-  .delete(partyController.deleteParty);
+  .route('/:ticketId')
+  .get(ticketController.getTicket)
+  .patch(ticketController.updateTicket)
+  .delete(ticketController.deleteTicket)
+  .post(ticketController.buyTickets);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Partys
- *   description: Party management and retrieval
+ *   name: Tickets
+ *   description: Ticket management and retrieval
  */
 
 /**
  * @swagger
- * /partys:
+ * /tickets:
  *   post:
- *     summary: Create a party
- *     description: Only admins can create other partys.
- *     tags: [Partys]
+ *     summary: Create a ticket
+ *     description: Only admins can create other tickets.
+ *     tags: [Tickets]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -54,19 +58,19 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [party, admin]
+ *                  enum: [ticket, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: party
+ *               role: ticket
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Party'
+ *                $ref: '#/components/schemas/Ticket'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -75,9 +79,9 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all partys
- *     description: Only admins can retrieve all partys.
- *     tags: [Partys]
+ *     summary: Get all tickets
+ *     description: Only admins can retrieve all tickets.
+ *     tags: [Tickets]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -85,12 +89,12 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: Party name
+ *         description: Ticket name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: Party role
+ *         description: Ticket role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -102,7 +106,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of partys
+ *         description: Maximum number of tickets
  *       - in: query
  *         name: page
  *         schema:
@@ -121,7 +125,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Party'
+ *                     $ref: '#/components/schemas/Ticket'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -142,11 +146,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /partys/{id}:
+ * /tickets/{id}:
  *   get:
- *     summary: Get a party
- *     description: Logged in partys can fetch only their own party information. Only admins can fetch other partys.
- *     tags: [Partys]
+ *     summary: Get a ticket
+ *     description: Logged in tickets can fetch only their own ticket information. Only admins can fetch other tickets.
+ *     tags: [Tickets]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -155,14 +159,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Party id
+ *         description: Ticket id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Party'
+ *                $ref: '#/components/schemas/Ticket'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -171,9 +175,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a party
- *     description: Logged in partys can only update their own information. Only admins can update other partys.
- *     tags: [Partys]
+ *     summary: Update a ticket
+ *     description: Logged in tickets can only update their own information. Only admins can update other tickets.
+ *     tags: [Tickets]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -182,7 +186,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Party id
+ *         description: Ticket id
  *     requestBody:
  *       required: true
  *       content:
@@ -211,7 +215,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Party'
+ *                $ref: '#/components/schemas/Ticket'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -222,9 +226,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a party
- *     description: Logged in partys can delete only themselves. Only admins can delete other partys.
- *     tags: [Partys]
+ *     summary: Delete a ticket
+ *     description: Logged in tickets can delete only themselves. Only admins can delete other tickets.
+ *     tags: [Tickets]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -233,7 +237,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Party id
+ *         description: Ticket id
  *     responses:
  *       "200":
  *         description: No content

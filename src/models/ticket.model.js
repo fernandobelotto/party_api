@@ -1,11 +1,18 @@
 const mongoose = require('mongoose');
+const { toJSON, paginate } = require('./plugins');
 
 const ticketSchema = mongoose.Schema({
-  description: String,
-  price: Number,
-  displayablePrice: String,
+  description: { type: String, required: true },
+  partyId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Party',
+    required: true,
+  },
+  price: { type: Number, required: true },
 });
 
+ticketSchema.plugin(toJSON);
+ticketSchema.plugin(paginate);
 /**
  * @typedef Ticket
  */
